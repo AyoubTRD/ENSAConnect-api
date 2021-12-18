@@ -1,0 +1,35 @@
+{
+  "name": "ensa_backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon --exec ts-node src/index.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@typegoose/typegoose": "^9.3.1",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/cookie-parser": "^1.4.2",
+    "@types/jsonwebtoken": "^8.5.6",
+    "apollo-server-express": "^3.5.0",
+    "bcryptjs": "^2.4.3",
+    "class-validator": "^0.13.2",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.2",
+    "express-graphql": "^0.12.0",
+    "graphql": "15.3.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.1.2",
+    "reflect-metadata": "^0.1.13",
+    "ts-node": "^10.4.0",
+    "type-graphql": "^1.1.1",
+    "typescript": "^4.5.4"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}

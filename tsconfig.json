@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "target": "es2018",
+    "lib": ["es2020"],
+    "allowJs": true,
+    "noImplicitAny": false,
+    "strict": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "baseUrl": "src"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}
