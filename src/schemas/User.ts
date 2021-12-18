@@ -1,6 +1,7 @@
 import { ObjectType, Field, InputType } from 'type-graphql';
 import { getModelForClass, prop as Property } from '@typegoose/typegoose';
 import mongoose from 'mongoose';
+import { IsEmail, MinLength } from 'class-validator';
 
 @ObjectType()
 export class User {
@@ -19,7 +20,7 @@ export class User {
   @Property({ required: true })
   lastName: string;
 
-  @Field()
+  @Field({ nullable: true })
   @Property({ default: '' })
   avatar: string;
 
@@ -28,6 +29,11 @@ export class User {
 
   @Property({ default: [], type: String })
   tokens: mongoose.Types.Array<string>;
+
+  @Field()
+  get fullName(): string {
+    return this.firstName + ' ' + this.lastName;
+  }
 }
 
 @ObjectType()
@@ -41,6 +47,7 @@ export class AuthResult {
 
 @InputType()
 export class UserInput implements Partial<User> {
+  @IsEmail()
   @Field()
   email: string;
 
@@ -50,6 +57,7 @@ export class UserInput implements Partial<User> {
   @Field()
   lastName: string;
 
+  @MinLength(6)
   @Field()
   password: string;
 
@@ -58,10 +66,36 @@ export class UserInput implements Partial<User> {
 }
 
 @InputType()
-export class Credentials {
+export class UpdateUserInput implements Partial<User> {
+  @IsEmail()
+  @Field({ nullable: true })
+  email: string;
+
+  @Field({ nullable: true })
+  firstName: string;
+
+  @Field({ nullable: true })
+  lastName: string;
+
+  @MinLength(6)
+  @Field({ nullable: true })
+  password: string;
+
+  @MinLength(6)
+  @Field({ nullable: true })
+  oldPassword: string;
+
+  @Field({ nullable: true })
+  avatar: string;
+}
+
+@InputType()
+export class Credentials implements Partial<User> {
+  @IsEmail()
   @Field()
   email: string;
 
+  @MinLength(6)
   @Field()
   password: string;
 }
