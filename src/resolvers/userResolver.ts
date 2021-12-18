@@ -1,21 +1,37 @@
 import { Resolver, Query, Mutation, Arg, Ctx } from 'type-graphql';
-import { AuthResult, Credentials, User, UserInput } from '../schemas/User';
-import { getModelForClass } from '@typegoose/typegoose';
+import {
+  UserModel,
+  AuthResult,
+  Credentials,
+  User,
+  UserInput,
+} from '../schemas/User';
 
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { GraphQLError } from 'graphql';
 import { Authorized } from '../middlewares/authorized';
 import { Context } from 'types/Context';
-import { ObjectId } from 'mongoose';
-
-const UserModel = getModelForClass(User);
 
 @Resolver((of) => User)
 export class UserResolver {
   @Query((returns) => [User])
   async getUsers(): Promise<User[]> {
     return await UserModel.find();
+  }
+
+  @Authorized()
+  @Mutation((returns) => Boolean)
+  async deleteToken(@Ctx() ctx: Context): Promise<boolean> {
+    try {
+      const token = ctx.req.headers.authorization;
+      ctx.user.tokens.splice(ctx.user.tokens.indexOf(token), 1);
+      await UserModel.findOneAndUpdate({ _id: ctx.user._id }, ctx.user);
+      return true;
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
   }
 
   @Query((returns) => AuthResult)
@@ -48,7 +64,7 @@ export class UserResolver {
   }
 
   @Mutation((returns) => AuthResult)
-  async addUser(
+  async createUser(
     @Arg('user') { email, firstName, lastName, avatar, password }: UserInput,
   ): Promise<{ token: string; user: User }> {
     const salt = await bcrypt.genSalt();

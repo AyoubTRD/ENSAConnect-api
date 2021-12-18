@@ -1,5 +1,5 @@
 import { ObjectType, Field, InputType } from 'type-graphql';
-import { prop as Property } from '@typegoose/typegoose';
+import { getModelForClass, prop as Property } from '@typegoose/typegoose';
 import mongoose from 'mongoose';
 
 @ObjectType()
@@ -65,3 +65,9 @@ export class Credentials {
   @Field()
   password: string;
 }
+
+export const UserModel = getModelForClass(User, {
+  schemaOptions: {
+    timestamps: true,
+  },
+});

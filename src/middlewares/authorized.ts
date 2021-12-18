@@ -1,12 +1,9 @@
 import { createMethodDecorator } from 'type-graphql';
-import { getModelForClass } from '@typegoose/typegoose';
-import { User } from '../schemas/User';
+import { UserModel } from '../schemas/User';
 
 import jwt from 'jsonwebtoken';
 import { GraphQLError } from 'graphql';
 import { Context } from 'types/Context';
-
-const UserModel = getModelForClass(User);
 
 export const Authorized = () => {
   return createMethodDecorator<Context>(async ({ context }, next) => {
