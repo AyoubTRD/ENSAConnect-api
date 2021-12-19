@@ -1,12 +1,21 @@
-import { ObjectType, Field, InputType } from 'type-graphql';
-import { getModelForClass, prop as Property } from '@typegoose/typegoose';
-import mongoose from 'mongoose';
+import { ObjectType, Field, InputType, Root } from 'type-graphql';
+import {
+  DocumentType,
+  getModelForClass,
+  prop as Property,
+} from '@typegoose/typegoose';
+import mongoose, { Document } from 'mongoose';
 import { IsEmail, MinLength } from 'class-validator';
 
 @ObjectType()
 export class User {
-  @Field()
   readonly _id: string;
+
+  @Field()
+  get id(): string {
+    const self = this.getSelf();
+    return self._id;
+  }
 
   @Field()
   @Property({ required: true, unique: true })
@@ -31,8 +40,17 @@ export class User {
   tokens: mongoose.Types.Array<string>;
 
   @Field()
+  createdAt: Date;
+
+  @Field()
   get fullName(): string {
-    return this.firstName + ' ' + this.lastName;
+    const self = this.getSelf();
+    return self.firstName + ' ' + self.lastName;
+  }
+
+  getSelf(): User {
+    if (this._id) return this;
+    return (this as any)._doc;
   }
 }
 
