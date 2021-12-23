@@ -6,7 +6,7 @@ import {
   User,
   UserInput,
   UpdateUserInput,
-} from '../schemas/User';
+} from '../schemas/user.schema';
 
 import { GraphQLError } from 'graphql';
 import { Authorized } from '../middlewares/authorized';

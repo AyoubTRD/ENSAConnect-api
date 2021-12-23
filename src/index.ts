@@ -7,14 +7,15 @@ import express from 'express';
 import cors from 'cors';
 import { buildSchema } from 'type-graphql';
 
-import { UserResolver } from './resolvers/userResolver';
+import { UserResolver } from './resolvers/user.resolver';
+import { PostResolver } from './resolvers/post.resolver';
 
 import { initDb } from './util/database';
 
 async function main() {
   initDb();
   const schema = await buildSchema({
-    resolvers: [UserResolver],
+    resolvers: [UserResolver, PostResolver],
     emitSchemaFile: true,
   });
 
