@@ -4,13 +4,17 @@ import {
   User,
   UserInput,
   UserModel,
-} from '../schemas/User';
+} from '../schemas/user.schema';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 export class UserService {
   async getAll(): Promise<User[]> {
     return await UserModel.find();
+  }
+
+  async getUserById(id: string): Promise<User> {
+    return await UserModel.findById(id);
   }
 
   async deleteToken({

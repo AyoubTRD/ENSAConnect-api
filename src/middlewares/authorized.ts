@@ -1,5 +1,5 @@
 import { createMethodDecorator } from 'type-graphql';
-import { UserModel } from '../schemas/User';
+import { UserModel } from '../schemas/user.schema';
 
 import jwt from 'jsonwebtoken';
 import { GraphQLError } from 'graphql';

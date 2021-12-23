@@ -1,12 +1,17 @@
-import { ObjectType, Field, InputType, Root } from 'type-graphql';
+import { ObjectType, Field, InputType } from 'type-graphql';
 import {
-  DocumentType,
   getModelForClass,
   prop as Property,
+  post,
+  plugin,
 } from '@typegoose/typegoose';
-import mongoose, { Document } from 'mongoose';
+import mongoose from 'mongoose';
 import { IsEmail, MinLength } from 'class-validator';
 
+@post<User>('remove', async function () {
+  console.log(this);
+  // Delete the posts created by this user
+})
 @ObjectType()
 export class User {
   readonly _id: string;
@@ -122,4 +127,5 @@ export const UserModel = getModelForClass(User, {
   schemaOptions: {
     timestamps: true,
   },
+  options: {},
 });
