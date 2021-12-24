@@ -54,6 +54,7 @@ export class UserService {
 
   async generateTokenForUser({ id }: { id: string }): Promise<[string, User]> {
     const user = await UserModel.findById(id);
+    console.log(process.env.JWT_KEY);
     const token = jwt.sign({ _id: id }, process.env.JWT_KEY);
     user.tokens.push(token);
     await user.save();
