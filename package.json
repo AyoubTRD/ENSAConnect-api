@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/index.js",
-    "dev": "nodemon --exec ts-node src/index.ts",
+    "dev": "nodemon --watch src --ext ts --exec \"npm run build && clear && npm start\"",
     "build": "tsc --project ./tsconfig.json"
   },
   "author": "",
@@ -22,6 +22,7 @@
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.2",
+    "express-fileupload": "^1.4.0",
     "express-graphql": "^0.12.0",
     "graphql": "15.3.0",
     "jsonwebtoken": "^8.5.1",
@@ -29,9 +30,12 @@
     "reflect-metadata": "^0.1.13",
     "ts-node": "^10.4.0",
     "type-graphql": "^1.1.1",
-    "typescript": "^4.5.4"
+    "typescript": "^4.5.4",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@types/express-fileupload": "^1.4.1",
+    "@types/uuid": "^8.3.4",
     "nodemon": "^2.0.15"
   }
 }

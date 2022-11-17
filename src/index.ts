@@ -11,6 +11,7 @@ import { UserResolver } from './resolvers/user.resolver';
 import { PostResolver } from './resolvers/post.resolver';
 
 import { initDb } from './util/database';
+import { restRouter } from './rest';
 
 async function main() {
   initDb();
@@ -22,6 +23,8 @@ async function main() {
   const app = express();
 
   app.use(cors());
+
+  app.use('/rest', restRouter);
 
   const server = new ApolloServer({
     schema,
@@ -37,7 +40,7 @@ async function main() {
 
   const port = process.env.PORT || 4000;
   app.listen(port, () =>
-    console.log(`Server is running on http://localhost:${port}/graphql`),
+    console.log(`Server is running on http://localhost:${port}/`),
   );
 }
 

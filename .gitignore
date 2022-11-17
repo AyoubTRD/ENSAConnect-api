@@ -2,3 +2,4 @@ node_modules/
 schema.gql
 .env
 dist/
+static/
