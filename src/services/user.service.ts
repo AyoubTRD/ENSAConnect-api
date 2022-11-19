@@ -7,6 +7,8 @@ import {
 } from '../schemas/user.schema';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import moment from 'moment';
+import { GraphQLError } from 'graphql';
 
 export class UserService {
   async getAll(): Promise<User[]> {
@@ -88,6 +90,21 @@ export class UserService {
       user.email = email;
     }
     if (typeof avatar === 'string') user.avatar = avatar;
+    if (firstName || lastName) {
+      if (
+        user.lastUpdatedName &&
+        moment().diff(user.lastUpdatedName, 'months') < 1
+      ) {
+        throw new GraphQLError(
+          'You do not yet have permission to update your name, you will be able to update it starting from: ' +
+            moment(user.lastUpdatedName)
+              .add(1, 'months')
+              .toDate()
+              .toISOString(),
+        );
+      }
+      user.lastUpdatedName = new Date();
+    }
     if (firstName) user.firstName = firstName;
     if (lastName) user.lastName = lastName;
     await user.save();

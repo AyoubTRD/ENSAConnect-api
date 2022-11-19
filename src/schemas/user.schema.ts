@@ -48,6 +48,9 @@ export class User {
   createdAt: Date;
 
   @Field()
+  lastUpdatedName: Date;
+
+  @Field()
   get fullName(): string {
     const self = this.getSelf();
     return self.firstName + ' ' + self.lastName;

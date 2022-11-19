@@ -73,7 +73,15 @@ export class UserResolver {
     input: UpdateUserInput,
     @Ctx() ctx: Context,
   ): Promise<User> {
-    return await this.userService.updateUser(ctx.user._id, input);
+    if (
+      (!input.firstName && !input.lastName) ||
+      (input.firstName == ctx.user.firstName &&
+        input.lastName == ctx.user.lastName)
+    ) {
+      delete input.firstName;
+      delete input.lastName;
+    }
+    return this.userService.updateUser(ctx.user._id, input);
   }
 
   @Query((returns) => AuthResult)
