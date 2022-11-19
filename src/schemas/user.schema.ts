@@ -47,6 +47,7 @@ export class User {
   @Field()
   createdAt: Date;
 
+  @Property()
   @Field()
   lastUpdatedName: Date;
 
