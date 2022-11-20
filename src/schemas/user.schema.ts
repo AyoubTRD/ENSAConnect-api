@@ -7,6 +7,7 @@ import {
 } from '@typegoose/typegoose';
 import mongoose from 'mongoose';
 import { IsEmail, MinLength } from 'class-validator';
+import moment from 'moment';
 
 @post<User>('remove', async function () {
   console.log(this);
@@ -48,13 +49,22 @@ export class User {
   createdAt: Date;
 
   @Property()
-  @Field()
+  @Field({ nullable: true })
   lastUpdatedName: Date;
 
   @Field()
   get fullName(): string {
     const self = this.getSelf();
     return self.firstName + ' ' + self.lastName;
+  }
+
+  @Field()
+  get canUpdateName(): boolean {
+    const self = this.getSelf();
+
+    if (!self.lastUpdatedName) return true;
+
+    return moment().diff(self.lastUpdatedName, 'months') >= 1;
   }
 
   getSelf(): User {
