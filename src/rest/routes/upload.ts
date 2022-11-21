@@ -7,6 +7,7 @@ import path from 'path';
 
 export const uploadEndpoint: RequestHandler = async (req, res) => {
   try {
+    // @ts-ignore
     const file = req.files?.file as UploadedFile;
     if (!file) {
       return res.status(400).send({
