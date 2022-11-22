@@ -66,6 +66,7 @@ export class UserService {
     id: string,
     {
       email,
+      phoneNumber,
       firstName,
       lastName,
       avatar,
@@ -107,6 +108,7 @@ export class UserService {
     }
     if (firstName) user.firstName = firstName;
     if (lastName) user.lastName = lastName;
+    if (phoneNumber) user.phoneNumber = phoneNumber;
     await user.save();
     return user;
   }

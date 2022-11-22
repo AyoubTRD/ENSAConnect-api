@@ -6,7 +6,7 @@ import {
   plugin,
 } from '@typegoose/typegoose';
 import mongoose from 'mongoose';
-import { IsEmail, MinLength } from 'class-validator';
+import { IsEmail, IsPhoneNumber, MinLength } from 'class-validator';
 import moment from 'moment';
 
 @post<User>('remove', async function () {
@@ -37,7 +37,15 @@ export class User {
 
   @Field({ nullable: true })
   @Property({ default: '' })
-  avatar: string;
+  avatar?: string;
+
+  @Field({ nullable: true })
+  @Property()
+  lastUpdatedName?: Date;
+
+  @Field({ nullable: true })
+  @Property()
+  phoneNumber?: string;
 
   @Property({ required: true })
   password: string;
@@ -47,10 +55,6 @@ export class User {
 
   @Field()
   createdAt: Date;
-
-  @Property()
-  @Field({ nullable: true })
-  lastUpdatedName: Date;
 
   @Field()
   get fullName(): string {
@@ -107,6 +111,10 @@ export class UpdateUserInput implements Partial<User> {
   @IsEmail()
   @Field({ nullable: true })
   email: string;
+
+  @IsPhoneNumber()
+  @Field({ nullable: true })
+  phoneNumber?: string;
 
   @Field({ nullable: true })
   firstName: string;
