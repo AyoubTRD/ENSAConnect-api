@@ -31,7 +31,7 @@ export class Post {
   @Field()
   text: string;
 
-  @Property({ default: [], type: String })
+  @Property({ default: [], type: [String] })
   @Field((returns) => [String])
   files: string[];
 
