@@ -17,4 +17,13 @@ export class PostService {
     });
     return post;
   }
+
+  async getPostById(id: string): Promise<Post | null> {
+    const post = await PostModel.findById(id);
+    return post || null;
+  }
+
+  deletePost(id: string) {
+    return PostModel.findByIdAndDelete(id);
+  }
 }

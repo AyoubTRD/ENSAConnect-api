@@ -40,4 +40,19 @@ export class PostResolver {
   ): Promise<Post> {
     return await this.postService.createPost(ctx.user.id, post);
   }
+
+  @Authorized()
+  @Mutation((returns) => Boolean)
+  async deletePost(
+    @Ctx() ctx: Context,
+    @Arg('postId') postId: string,
+  ): Promise<boolean> {
+    const post = await this.postService.getPostById(postId);
+
+    if (!post || post.authorId.toString() !== ctx.user.id) return false;
+
+    await this.postService.deletePost(postId);
+
+    return true;
+  }
 }
