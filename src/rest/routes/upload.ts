@@ -22,10 +22,7 @@ export const uploadEndpoint: RequestHandler = async (req, res) => {
     await file.mv(path.join(process.cwd(), 'static', savedName));
 
     return res.send({
-      filePath:
-        process.env.NODE_ENV === 'production'
-          ? 'http://' + req.host + '/rest/static/' + savedName
-          : 'http://10.0.2.2:4000/rest/static/' + savedName,
+      filePath: 'http://' + req.host + '/rest/static/' + savedName,
     });
   } catch (e) {
     console.error(e);

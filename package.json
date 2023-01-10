@@ -12,7 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@sendgrid/mail": "^7.7.0",
-    "@typegoose/typegoose": "^9.3.1",
+    "@typegoose/typegoose": "^10.0.0",
     "@types/bcryptjs": "^2.4.2",
     "@types/cookie-parser": "^1.4.2",
     "@types/jsonwebtoken": "^8.5.6",
