@@ -1,18 +1,15 @@
 import { Resolver, Query, Mutation, Arg, Ctx } from 'type-graphql';
-import {
-  UserModel,
-  AuthResult,
-  Credentials,
-  User,
-  UserInput,
-  UpdateUserInput,
-} from '../schemas/user.schema';
+import { UserModel, AuthResult, User } from '../schemas/user/user.schema';
+import { CredentialsInput } from '../schemas/user/inputs/credentials.input';
+import { UpdateUserInput } from '../schemas/user/inputs/update-user.input';
+import { CreateUserInput } from '../schemas/user/inputs/create-user.input';
 
 import { GraphQLError } from 'graphql';
 import { Authorized } from '../middlewares/authorized';
 import { Context } from '../types/Context';
 
 import { UserService } from '../services/user.service';
+import { Errors } from '../types/Errors';
 
 @Resolver((of) => User)
 export class UserResolver {
@@ -52,7 +49,7 @@ export class UserResolver {
 
   @Mutation((returns) => AuthResult)
   async createUser(
-    @Arg('user') input: UserInput,
+    @Arg('user') input: CreateUserInput,
   ): Promise<{ token: string; user: User }> {
     try {
       const newUser = await this.userService.createUser(input);
@@ -62,7 +59,7 @@ export class UserResolver {
       return { token, user };
     } catch (e) {
       console.error(e);
-      throw new GraphQLError('email_taken');
+      throw new GraphQLError(Errors.email_taken);
     }
   }
 
@@ -86,7 +83,7 @@ export class UserResolver {
 
   @Query((returns) => AuthResult)
   async getToken(
-    @Arg('credentials') { email, password }: Credentials,
+    @Arg('credentials') { email, password }: CredentialsInput,
   ): Promise<AuthResult> {
     const userToAuthenticate = await this.userService.getUserWithCredentials({
       email,

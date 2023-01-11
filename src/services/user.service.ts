@@ -1,10 +1,7 @@
-import {
-  Credentials,
-  UpdateUserInput,
-  User,
-  UserInput,
-  UserModel,
-} from '../schemas/user.schema';
+import { User, UserModel } from '../schemas/user/user.schema';
+import { CredentialsInput } from '../schemas/user/inputs/credentials.input';
+import { UpdateUserInput } from '../schemas/user/inputs/update-user.input';
+import { CreateUserInput } from '../schemas/user/inputs/create-user.input';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import moment from 'moment';
@@ -41,7 +38,7 @@ export class UserService {
     lastName,
     avatar,
     password,
-  }: UserInput): Promise<User> {
+  }: CreateUserInput): Promise<User> {
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
     const user = await UserModel.create({
@@ -116,7 +113,7 @@ export class UserService {
   async getUserWithCredentials({
     email,
     password,
-  }: Credentials): Promise<User> {
+  }: CredentialsInput): Promise<User> {
     const user = await UserModel.findOne({
       email: email.toLowerCase(),
     });

@@ -1,16 +1,17 @@
 import { createMethodDecorator } from 'type-graphql';
-import { UserModel } from '../schemas/user.schema';
+import { UserModel } from '../schemas/user/user.schema';
 
 import jwt from 'jsonwebtoken';
 import { GraphQLError } from 'graphql';
 import { Context } from 'types/Context';
+import { Errors } from '../types/Errors';
 
 export const Authorized = () => {
   return createMethodDecorator<Context>(async ({ context }, next) => {
     const token = context.req.headers.authorization as string;
-    if (!token) throw new GraphQLError('unauthorized');
+    if (!token) throw new GraphQLError(Errors.unauthorized);
     const isValid = jwt.verify(token, process.env.JWT_KEY);
-    if (!isValid) throw new GraphQLError('unauthorized');
+    if (!isValid) throw new GraphQLError(Errors.unauthorized);
 
     const decoded = jwt.decode(token) as {
       _id: string;
@@ -20,7 +21,7 @@ export const Authorized = () => {
       _id: decoded._id,
       tokens: token,
     });
-    if (!user) throw new GraphQLError('unauthorized');
+    if (!user) throw new GraphQLError(Errors.unauthorized);
     context.user = user;
     return next();
   });

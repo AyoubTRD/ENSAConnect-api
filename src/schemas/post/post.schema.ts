@@ -4,9 +4,9 @@ import {
   prop as Property,
   Ref,
 } from '@typegoose/typegoose';
-import { Field, InputType, ObjectType } from 'type-graphql';
+import { Field, ObjectType } from 'type-graphql';
 
-import { User } from './user.schema';
+import { User } from '../user/user.schema';
 
 @ObjectType()
 export class Post {
@@ -39,15 +39,6 @@ export class Post {
     if (this._id) return this;
     return (this as any)._doc;
   }
-}
-
-@InputType()
-export class PostInput implements Partial<Post> {
-  @Field({ defaultValue: '' })
-  text: string;
-
-  @Field((of) => [String], { defaultValue: [] })
-  files: string[];
 }
 
 export const PostModel = getModelForClass(Post, {

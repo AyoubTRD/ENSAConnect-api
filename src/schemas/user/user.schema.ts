@@ -1,4 +1,4 @@
-import { ObjectType, Field, InputType } from 'type-graphql';
+import { ObjectType, Field } from 'type-graphql';
 import {
   getModelForClass,
   prop as Property,
@@ -6,7 +6,6 @@ import {
   plugin,
 } from '@typegoose/typegoose';
 import mongoose from 'mongoose';
-import { IsEmail, IsPhoneNumber, MinLength } from 'class-validator';
 import moment from 'moment';
 
 @post<User>('remove', async function () {
@@ -84,65 +83,6 @@ export class AuthResult {
 
   @Field()
   user: User;
-}
-
-@InputType()
-export class UserInput implements Partial<User> {
-  @IsEmail()
-  @Field()
-  email: string;
-
-  @Field()
-  firstName: string;
-
-  @Field()
-  lastName: string;
-
-  @MinLength(6)
-  @Field()
-  password: string;
-
-  @Field()
-  avatar: string;
-}
-
-@InputType()
-export class UpdateUserInput implements Partial<User> {
-  @IsEmail()
-  @Field({ nullable: true })
-  email: string;
-
-  @IsPhoneNumber()
-  @Field({ nullable: true })
-  phoneNumber?: string;
-
-  @Field({ nullable: true })
-  firstName: string;
-
-  @Field({ nullable: true })
-  lastName: string;
-
-  @MinLength(6)
-  @Field({ nullable: true })
-  password: string;
-
-  @MinLength(6)
-  @Field({ nullable: true })
-  oldPassword: string;
-
-  @Field({ nullable: true })
-  avatar: string;
-}
-
-@InputType()
-export class Credentials implements Partial<User> {
-  @IsEmail()
-  @Field()
-  email: string;
-
-  @MinLength(6)
-  @Field()
-  password: string;
 }
 
 export const UserModel = getModelForClass(User, {

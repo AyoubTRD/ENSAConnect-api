@@ -6,14 +6,19 @@ import {
   Query,
   Resolver,
   Root,
+  UnauthorizedError,
 } from 'type-graphql';
+import { GraphQLError } from 'graphql';
 import { Authorized } from '../middlewares/authorized';
 
-import { Post, PostInput } from '../schemas/post.schema';
-import { User } from '../schemas/user.schema';
+import { Post } from '../schemas/post/post.schema';
+import { CreatePostInput } from '../schemas/post/inputs/create-post.input';
+import { User } from '../schemas/user/user.schema';
 import { PostService } from '../services/post.service';
 import { UserService } from '../services/user.service';
 import { Context } from 'types/Context';
+import { Errors } from '../types/Errors';
+import { UpdatePostInput } from '../schemas/post/inputs/update-post.input';
 
 @Resolver((of) => Post)
 export class PostResolver {
@@ -36,7 +41,7 @@ export class PostResolver {
   @Mutation((returns) => Post)
   async createPost(
     @Ctx() ctx: Context,
-    @Arg('post') post: PostInput,
+    @Arg('post') post: CreatePostInput,
   ): Promise<Post> {
     return await this.postService.createPost(ctx.user.id, post);
   }
@@ -49,10 +54,26 @@ export class PostResolver {
   ): Promise<boolean> {
     const post = await this.postService.getPostById(postId);
 
-    if (!post || post.authorId.toString() !== ctx.user.id) return false;
+    if (!post || post.authorId.toString() !== ctx.user.id.toString())
+      return false;
 
     await this.postService.deletePost(postId);
 
     return true;
+  }
+
+  @Authorized()
+  @Mutation((returns) => Post)
+  async updatePost(
+    @Ctx() context: Context,
+    @Arg('postId') postId: string,
+    @Arg('input') input: UpdatePostInput,
+  ) {
+    let post = await this.postService.getPostById(postId);
+
+    if (post.authorId.toString() !== context.user.id.toString())
+      throw new GraphQLError(Errors.unauthorized);
+
+    return this.postService.updatePost(post, input);
   }
 }
