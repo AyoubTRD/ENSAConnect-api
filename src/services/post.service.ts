@@ -1,30 +1,23 @@
 import { PostModel, Post } from '../schemas/post/post.schema';
 import { CreatePostInput } from '../schemas/post/inputs/create-post.input';
 import { UpdatePostInput } from '../schemas/post/inputs/update-post.input';
-import { Document } from 'mongoose';
-import { BeAnObject } from '@typegoose/typegoose/lib/types';
+import { DbDocument } from '../types/DbDocument';
 
 export class PostService {
   async getAll(): Promise<Post[]> {
-    return (await PostModel.find()).map((p) => {
-      p.files = p.files || [];
-
-      return p;
-    });
+    return PostModel.find();
   }
 
-  async createPost(authorId: string, { text, files }: CreatePostInput) {
+  async createPost(authorId: string, { text, fileIds }: CreatePostInput) {
     const post = await PostModel.create({
       authorId,
-      files,
+      fileIds,
       text,
     });
     return post;
   }
 
-  async getPostById(
-    id: string,
-  ): Promise<(Post & Document<string, BeAnObject, Post>) | null> {
+  async getPostById(id: string): Promise<DbDocument<Post>> {
     const post = await PostModel.findById(id);
     return post || null;
   }
@@ -35,12 +28,9 @@ export class PostService {
     return this.updatePost(post, input);
   }
 
-  async updatePost(
-    post: Document<string, BeAnObject, Post> & Post,
-    { text, files }: UpdatePostInput,
-  ) {
+  async updatePost(post: DbDocument<Post>, { text, fileIds }: UpdatePostInput) {
     if (text != null && text != undefined) post.text = text;
-    if (files) post.files = files;
+    if (fileIds) post.fileIds = fileIds;
 
     await post.save();
 

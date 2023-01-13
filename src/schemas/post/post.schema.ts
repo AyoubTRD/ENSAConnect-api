@@ -5,6 +5,7 @@ import {
   Ref,
 } from '@typegoose/typegoose';
 import { Field, ObjectType } from 'type-graphql';
+import { MediaFile } from '../file/mediafile.schema';
 
 import { User } from '../user/user.schema';
 
@@ -25,15 +26,16 @@ export class Post {
   updatedAt: Date;
 
   @Property({ ref: User })
+  @Field(() => String)
   authorId: Ref<User>;
 
   @Property()
   @Field()
   text: string;
 
-  @Property({ default: [], type: [String] })
+  @Property({ default: [], ref: MediaFile })
   @Field((returns) => [String])
-  files: string[];
+  fileIds: Ref<MediaFile>[];
 
   getSelf(): Post {
     if (this._id) return this;

@@ -7,5 +7,5 @@ export class CreatePostInput implements Partial<Post> {
   text: string;
 
   @Field((of) => [String], { defaultValue: [] })
-  files: string[];
+  fileIds: string[];
 }

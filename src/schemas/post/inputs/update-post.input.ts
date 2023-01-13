@@ -7,5 +7,5 @@ export class UpdatePostInput implements Partial<Post> {
   text?: string;
 
   @Field((of) => [String], { nullable: true })
-  files?: string[];
+  fileIds?: string[];
 }

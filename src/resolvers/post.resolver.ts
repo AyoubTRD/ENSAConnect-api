@@ -19,22 +19,31 @@ import { UserService } from '../services/user.service';
 import { Context } from 'types/Context';
 import { Errors } from '../types/Errors';
 import { UpdatePostInput } from '../schemas/post/inputs/update-post.input';
+import { MediaFile } from '../schemas/file/mediafile.schema';
+import { MediaFileService } from '../services/mediafile.service';
 
 @Resolver((of) => Post)
 export class PostResolver {
   private postService = new PostService();
   private userService = new UserService();
+  private mediaFileService = new MediaFileService();
 
   @FieldResolver((returns) => User)
   async author(@Root() root: any): Promise<User> {
     const post = root._doc as Post;
-    return await this.userService.getUserById(post.authorId as string);
+    return this.userService.getUserById(post.authorId as string);
+  }
+
+  @FieldResolver((returns) => [MediaFile])
+  async files(@Root() root: any): Promise<MediaFile[]> {
+    const post = root._doc as Post;
+    return this.mediaFileService.getMediaFilesByIds(post.fileIds as string[]);
   }
 
   @Authorized()
   @Query((returns) => [Post])
   async getPosts(): Promise<Post[]> {
-    return await this.postService.getAll();
+    return this.postService.getAll();
   }
 
   @Authorized()

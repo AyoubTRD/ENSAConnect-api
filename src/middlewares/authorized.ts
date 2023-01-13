@@ -10,6 +10,7 @@ export const Authorized = () => {
   return createMethodDecorator<Context>(async ({ context }, next) => {
     const token = context.req.headers.authorization as string;
     if (!token) throw new GraphQLError(Errors.unauthorized);
+
     const isValid = jwt.verify(token, process.env.JWT_KEY);
     if (!isValid) throw new GraphQLError(Errors.unauthorized);
 
@@ -22,6 +23,7 @@ export const Authorized = () => {
       tokens: token,
     });
     if (!user) throw new GraphQLError(Errors.unauthorized);
+
     context.user = user;
     return next();
   });
