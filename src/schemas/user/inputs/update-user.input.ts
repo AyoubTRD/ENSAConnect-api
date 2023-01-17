@@ -27,5 +27,5 @@ export class UpdateUserInput implements Partial<User> {
   oldPassword: string;
 
   @Field({ nullable: true })
-  avatar: string;
+  avatarFileId?: string;
 }

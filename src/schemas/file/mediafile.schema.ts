@@ -23,7 +23,7 @@ export class MediaFile {
   @Field()
   updatedAt: Date;
 
-  @Property({ ref: User, required: true })
+  @Property({ ref: 'User', required: true })
   @Field(() => String)
   userId: Ref<User>;
 

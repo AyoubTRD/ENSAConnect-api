@@ -1,4 +1,12 @@
-import { Resolver, Query, Mutation, Arg, Ctx } from 'type-graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Arg,
+  Ctx,
+  FieldResolver,
+  Root,
+} from 'type-graphql';
 import { UserModel, AuthResult, User } from '../schemas/user/user.schema';
 import { CredentialsInput } from '../schemas/user/inputs/credentials.input';
 import { UpdateUserInput } from '../schemas/user/inputs/update-user.input';
@@ -10,10 +18,20 @@ import { Context } from '../types/Context';
 
 import { UserService } from '../services/user.service';
 import { Errors } from '../types/Errors';
+import { MediaFileService } from '../services/mediafile.service';
+import { MediaFile } from '../schemas/file/mediafile.schema';
 
 @Resolver((of) => User)
 export class UserResolver {
   private userService = new UserService();
+  private mediaService = new MediaFileService();
+
+  @FieldResolver((returns) => MediaFile, { nullable: true })
+  avatar(@Root() root) {
+    const user = root._doc as User;
+    if (!user.avatarFileId) return null;
+    return this.mediaService.getMediaFileById(user.avatarFileId as string);
+  }
 
   @Query((returns) => [User])
   async getUsers(): Promise<User[]> {

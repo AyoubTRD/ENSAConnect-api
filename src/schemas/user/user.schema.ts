@@ -4,9 +4,11 @@ import {
   prop as Property,
   post,
   plugin,
+  Ref,
 } from '@typegoose/typegoose';
 import mongoose from 'mongoose';
 import moment from 'moment';
+import { MediaFile } from '../file/mediafile.schema';
 
 @post<User>('remove', async function () {
   console.log(this);
@@ -34,9 +36,9 @@ export class User {
   @Property({ required: true })
   lastName: string;
 
-  @Field({ nullable: true })
-  @Property({ default: '' })
-  avatar?: string;
+  @Field(() => String, { nullable: true })
+  @Property({ ref: MediaFile })
+  avatarFileId?: Ref<MediaFile>;
 
   @Field({ nullable: true })
   @Property()

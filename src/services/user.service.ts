@@ -66,7 +66,7 @@ export class UserService {
       phoneNumber,
       firstName,
       lastName,
-      avatar,
+      avatarFileId,
       oldPassword,
       password,
     }: UpdateUserInput,
@@ -87,7 +87,7 @@ export class UserService {
       if (userWithSameEmail) throw new Error('email_taken');
       user.email = email;
     }
-    if (typeof avatar === 'string') user.avatar = avatar;
+    if (typeof avatarFileId === 'string') user.avatarFileId = avatarFileId;
     if (firstName || lastName) {
       if (
         user.lastUpdatedName &&
