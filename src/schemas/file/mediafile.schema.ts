@@ -38,6 +38,10 @@ export class MediaFile {
   @Property()
   @Field({ nullable: true })
   blurhashCode?: string;
+
+  @Property()
+  @Field({ nullable: true })
+  thumbnailPath?: string;
 }
 
 export const MediaFileModel = getModelForClass(MediaFile, {

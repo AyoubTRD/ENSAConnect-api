@@ -7,10 +7,13 @@ import path from 'path';
 import { AuthorizedRequest } from '../../middlewares/rest-authorized';
 import { MediaFileModel } from '../../schemas/file/mediafile.schema';
 import { MediaFileType } from '../../schemas/file/enums/mediafile-type.enum';
+import { VideoService } from '../../services/video.service';
 
 type UploadRequestBody = {
   blurhashCode?: string;
 };
+
+const videoService = new VideoService();
 
 export const uploadRoute: (type: MediaFileType) => RequestHandler =
   (type: MediaFileType) => async (req: AuthorizedRequest, res) => {
@@ -27,11 +30,13 @@ export const uploadRoute: (type: MediaFileType) => RequestHandler =
 
       const fileName = file.name;
       const ext = fileName.split('.').at(-1);
-      const savedName = uuid4() + '.' + ext;
+      const randomName = uuid4();
+      const savedName = randomName + '.' + ext;
 
-      await file.mv(path.join(process.cwd(), 'static', savedName));
+      const filePath = path.join(process.cwd(), 'static', savedName);
+      await file.mv(filePath);
 
-      const filePath =
+      const fileUrl =
         'http://' +
         req.hostname +
         ':' +
@@ -39,11 +44,34 @@ export const uploadRoute: (type: MediaFileType) => RequestHandler =
         '/rest/static/' +
         savedName;
 
+      let thumbnailUrl: string;
+
+      if (type === MediaFileType.VIDEO) {
+        const thumbnailFolder = path.join(
+          process.cwd(),
+          'static',
+          'thumbnails',
+        );
+
+        const thumbnailFilename = await videoService.generateThumbnailForVideo(
+          filePath,
+          thumbnailFolder,
+        );
+        thumbnailUrl =
+          'http://' +
+          req.hostname +
+          ':' +
+          process.env.PORT +
+          '/rest/static/thumbnails/' +
+          thumbnailFilename;
+      }
+
       const mediaFile = await MediaFileModel.create({
-        filePath,
-        blurhashCode: body.blurhashCode || '',
+        filePath: fileUrl,
+        blurhashCode: body.blurhashCode,
         userId: req.userId,
         fileType: type,
+        thumbnailPath: thumbnailUrl,
       });
 
       return res.send(mediaFile.toJSON());
