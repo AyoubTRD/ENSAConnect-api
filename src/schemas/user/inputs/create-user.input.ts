@@ -17,7 +17,4 @@ export class CreateUserInput implements Partial<User> {
   @MinLength(6)
   @Field()
   password: string;
-
-  @Field()
-  avatar: string;
 }

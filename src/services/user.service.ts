@@ -36,14 +36,12 @@ export class UserService {
     email,
     firstName,
     lastName,
-    avatar,
     password,
   }: CreateUserInput): Promise<User> {
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
     const user = await UserModel.create({
       email: email.toLowerCase(),
-      avatar,
       firstName,
       lastName,
       password: hashedPassword,

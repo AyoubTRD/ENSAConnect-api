@@ -3,11 +3,11 @@ import { UserModel } from '../schemas/user/user.schema';
 
 import jwt from 'jsonwebtoken';
 import { GraphQLError } from 'graphql';
-import { Context } from 'types/Context';
+import { AuthorizedContext } from 'types/AuthorizedContext';
 import { Errors } from '../types/Errors';
 
 export const Authorized = () => {
-  return createMethodDecorator<Context>(async ({ context }, next) => {
+  return createMethodDecorator<AuthorizedContext>(async ({ context }, next) => {
     const token = context.req.headers.authorization as string;
     if (!token) throw new GraphQLError(Errors.unauthorized);
 

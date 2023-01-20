@@ -16,7 +16,7 @@ import { CreatePostInput } from '../schemas/post/inputs/create-post.input';
 import { User } from '../schemas/user/user.schema';
 import { PostService } from '../services/post.service';
 import { UserService } from '../services/user.service';
-import { Context } from 'types/Context';
+import { AuthorizedContext } from 'types/AuthorizedContext';
 import { Errors } from '../types/Errors';
 import { UpdatePostInput } from '../schemas/post/inputs/update-post.input';
 import { MediaFile } from '../schemas/file/mediafile.schema';
@@ -49,7 +49,7 @@ export class PostResolver {
   @Authorized()
   @Mutation((returns) => Post)
   async createPost(
-    @Ctx() ctx: Context,
+    @Ctx() ctx: AuthorizedContext,
     @Arg('post') post: CreatePostInput,
   ): Promise<Post> {
     return await this.postService.createPost(ctx.user.id, post);
@@ -58,7 +58,7 @@ export class PostResolver {
   @Authorized()
   @Mutation((returns) => Boolean)
   async deletePost(
-    @Ctx() ctx: Context,
+    @Ctx() ctx: AuthorizedContext,
     @Arg('postId') postId: string,
   ): Promise<boolean> {
     const post = await this.postService.getPostById(postId);
@@ -74,7 +74,7 @@ export class PostResolver {
   @Authorized()
   @Mutation((returns) => Post)
   async updatePost(
-    @Ctx() context: Context,
+    @Ctx() context: AuthorizedContext,
     @Arg('postId') postId: string,
     @Arg('input') input: UpdatePostInput,
   ) {

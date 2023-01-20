@@ -14,7 +14,7 @@ import { CreateUserInput } from '../schemas/user/inputs/create-user.input';
 
 import { GraphQLError } from 'graphql';
 import { Authorized } from '../middlewares/authorized';
-import { Context } from '../types/Context';
+import { AuthorizedContext } from '../types/AuthorizedContext';
 
 import { UserService } from '../services/user.service';
 import { Errors } from '../types/Errors';
@@ -40,7 +40,7 @@ export class UserResolver {
 
   @Authorized()
   @Mutation((returns) => Boolean)
-  async deleteToken(@Ctx() ctx: Context): Promise<boolean> {
+  async deleteToken(@Ctx() ctx: AuthorizedContext): Promise<boolean> {
     try {
       await this.userService.deleteToken({
         id: ctx.user._id,
@@ -55,7 +55,7 @@ export class UserResolver {
 
   @Authorized()
   @Mutation((returns) => Boolean)
-  async deleteMe(@Ctx() ctx: Context): Promise<boolean> {
+  async deleteMe(@Ctx() ctx: AuthorizedContext): Promise<boolean> {
     try {
       await this.userService.deleteUser({ id: ctx.user._id });
       return true;
@@ -86,7 +86,7 @@ export class UserResolver {
   async updateUser(
     @Arg('user')
     input: UpdateUserInput,
-    @Ctx() ctx: Context,
+    @Ctx() ctx: AuthorizedContext,
   ): Promise<User> {
     if (
       (!input.firstName && !input.lastName) ||
@@ -118,7 +118,7 @@ export class UserResolver {
 
   @Authorized()
   @Query((returns) => User)
-  getMe(@Ctx() ctx: Context): User {
+  getMe(@Ctx() ctx: AuthorizedContext): User {
     return ctx.user;
   }
 

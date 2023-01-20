@@ -3,3 +3,4 @@ schema.gql
 .env
 dist/
 static/
+.DS_Store
