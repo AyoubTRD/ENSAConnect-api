@@ -33,11 +33,6 @@ export class UserResolver {
     return this.mediaService.getMediaFileById(user.avatarFileId as string);
   }
 
-  @Query((returns) => [User])
-  async getUsers(): Promise<User[]> {
-    return await this.userService.getAll();
-  }
-
   @Authorized()
   @Mutation((returns) => Boolean)
   async deleteToken(@Ctx() ctx: AuthorizedContext): Promise<boolean> {

@@ -16,12 +16,14 @@ import { restRouter } from './rest';
 import { MediaFileResolver } from './resolvers/mediafile.resolver';
 import { ChatResolver } from './resolvers/chat.resolver';
 import { MessageResolver } from './resolvers/message.resolver';
+import { PublicUserResolver } from './resolvers/public-user.resolver';
 
 async function main() {
   initDb();
   const schema = await buildSchema({
     resolvers: [
       UserResolver,
+      PublicUserResolver,
       PostResolver,
       MediaFileResolver,
       ChatResolver,
