@@ -6,14 +6,12 @@ import {
   Query,
   Resolver,
   Root,
-  UnauthorizedError,
 } from 'type-graphql';
 import { GraphQLError } from 'graphql';
 import { Authorized } from '../middlewares/authorized';
 
 import { Post } from '../schemas/post/post.schema';
 import { CreatePostInput } from '../schemas/post/inputs/create-post.input';
-import { User } from '../schemas/user/user.schema';
 import { PostService } from '../services/post.service';
 import { UserService } from '../services/user.service';
 import { AuthorizedContext } from 'types/AuthorizedContext';
@@ -21,6 +19,7 @@ import { Errors } from '../types/Errors';
 import { UpdatePostInput } from '../schemas/post/inputs/update-post.input';
 import { MediaFile } from '../schemas/file/mediafile.schema';
 import { MediaFileService } from '../services/mediafile.service';
+import { PublicUser } from '../schemas/user/public-user.schema';
 
 @Resolver((of) => Post)
 export class PostResolver {
@@ -28,8 +27,8 @@ export class PostResolver {
   private userService = new UserService();
   private mediaFileService = new MediaFileService();
 
-  @FieldResolver((returns) => User)
-  async author(@Root() root: any): Promise<User> {
+  @FieldResolver((returns) => PublicUser)
+  async author(@Root() root: any): Promise<PublicUser> {
     const post = root._doc as Post;
     return this.userService.getUserById(post.authorId as string);
   }
