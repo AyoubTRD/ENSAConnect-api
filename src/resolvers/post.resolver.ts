@@ -29,13 +29,13 @@ export class PostResolver {
 
   @FieldResolver((returns) => PublicUser)
   async author(@Root() root: any): Promise<PublicUser> {
-    const post = root._doc as Post;
+    const post = (root._doc || root) as Post;
     return this.userService.getUserById(post.authorId as string);
   }
 
   @FieldResolver((returns) => [MediaFile])
   async files(@Root() root: any): Promise<MediaFile[]> {
-    const post = root._doc as Post;
+    const post = (root._doc || root) as Post;
     return this.mediaFileService.getMediaFilesByIds(post.fileIds as string[]);
   }
 

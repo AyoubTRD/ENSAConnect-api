@@ -14,6 +14,10 @@ export class ChatService {
       .lean();
   }
 
+  async getChatById(chatId: string): Promise<DbDocument<Chat>> {
+    return ChatModel.findById(chatId);
+  }
+
   async getLastMessageInChat(chatId: string): Promise<Message | null> {
     return MessageModel.find({ chatId })
       .sort({ createdAt: 'desc' })

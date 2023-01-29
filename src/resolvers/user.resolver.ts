@@ -28,7 +28,7 @@ export class UserResolver {
 
   @FieldResolver((returns) => MediaFile, { nullable: true })
   avatar(@Root() root) {
-    const user = root._doc as User;
+    const user = (root._doc || root) as User;
     if (!user.avatarFileId) return null;
     return this.mediaService.getMediaFileById(user.avatarFileId as string);
   }
