@@ -37,7 +37,7 @@ export const uploadRoute: (type: MediaFileType) => RequestHandler =
       await file.mv(filePath);
 
       const fileUrl =
-        'http://' +
+        (process.env.HTTPS ? 'https://' : 'http://') +
         req.hostname +
         ':' +
         process.env.PORT +
